@@ -176,27 +176,6 @@
 				border-color: var(--line);
 			}
 
-			.eyebrow {
-				display: flex;
-				align-items: center;
-				gap: 10px;
-				margin: 0 0 24px;
-				color: var(--muted);
-				font-size: 12px;
-				font-weight: 760;
-				letter-spacing: 0.14em;
-				text-transform: uppercase;
-			}
-
-			.eyebrow::before {
-				width: 7px;
-				height: 7px;
-				border-radius: 50%;
-				background: var(--accent);
-				box-shadow: 0 0 0 6px color-mix(in srgb, var(--accent) 11%, transparent);
-				content: "";
-			}
-
 			h1 {
 				max-width: 680px;
 				margin: 0;
@@ -274,6 +253,7 @@
 			}
 
 			.primary-cta {
+				position: relative;
 				display: grid;
 				grid-template-columns: auto 1fr auto auto;
 				gap: 15px;
@@ -288,14 +268,48 @@
 				font-size: 17px;
 				font-weight: 760;
 				text-decoration: none;
+				overflow: hidden;
+				isolation: isolate;
 				box-shadow: 0 12px 32px color-mix(in srgb, var(--accent) 18%, transparent);
 				transition: transform 160ms ease, filter 160ms ease, box-shadow 160ms ease;
+			}
+
+			.primary-cta::before {
+				position: absolute;
+				inset: -90% 45% -90% -25%;
+				border-radius: 50%;
+				background: color-mix(in srgb, white 38%, transparent);
+				content: "";
+				opacity: 0;
+				transform: scale(0.45);
+				transition: opacity 220ms ease, transform 440ms cubic-bezier(0.22, 1, 0.36, 1);
+				z-index: -1;
 			}
 
 			.primary-cta:hover {
 				transform: translateY(-2px);
 				filter: saturate(1.08) brightness(1.04);
 				box-shadow: 0 16px 38px color-mix(in srgb, var(--accent) 25%, transparent);
+			}
+
+			.primary-cta:hover::before,
+			.primary-cta:focus-visible::before {
+				opacity: 0.26;
+				transform: scale(1);
+			}
+
+			.primary-cta svg {
+				transition: transform 220ms cubic-bezier(0.22, 1, 0.36, 1);
+			}
+
+			.primary-cta:hover svg:first-child,
+			.primary-cta:focus-visible svg:first-child {
+				animation: heart-pop 620ms cubic-bezier(0.22, 1, 0.36, 1);
+			}
+
+			.primary-cta:hover svg:last-child,
+			.primary-cta:focus-visible svg:last-child {
+				transform: translateX(4px);
 			}
 
 			.primary-cta svg,
@@ -336,7 +350,28 @@
 				justify-content: flex-end;
 				color: inherit;
 				text-decoration: none;
-				transition: background 150ms ease, color 150ms ease;
+				overflow: hidden;
+				isolation: isolate;
+				transition: background 180ms ease, color 180ms ease, box-shadow 180ms ease;
+			}
+
+			.tier::before {
+				position: absolute;
+				inset: 0;
+				background: radial-gradient(circle at 18% 16%, color-mix(in srgb, var(--accent) 24%, transparent), transparent 46%);
+				content: "";
+				opacity: 0;
+				transform: scale(0.72);
+				transition: opacity 220ms ease, transform 420ms cubic-bezier(0.22, 1, 0.36, 1);
+				z-index: -1;
+			}
+
+			.tier:nth-child(2)::before {
+				background: radial-gradient(circle at 50% 18%, color-mix(in srgb, var(--accent) 26%, transparent), transparent 48%);
+			}
+
+			.tier:nth-child(3)::before {
+				background: radial-gradient(circle at 82% 18%, color-mix(in srgb, var(--accent) 25%, transparent), transparent 46%);
 			}
 
 			.tier + .tier {
@@ -350,6 +385,58 @@
 
 			.tier:hover {
 				color: var(--accent);
+				box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--accent) 32%, transparent);
+			}
+
+			.tier:hover::before,
+			.tier:focus-visible::before {
+				opacity: 1;
+				transform: scale(1);
+			}
+
+			.tier__charm {
+				position: absolute;
+				top: 19px;
+				left: 18px;
+				display: grid;
+				width: 33px;
+				height: 33px;
+				place-items: center;
+				border: 1px solid color-mix(in srgb, var(--accent) 28%, var(--line));
+				border-radius: 11px;
+				color: var(--accent);
+				background: color-mix(in srgb, var(--accent) 8%, var(--panel-strong));
+				transition: transform 260ms cubic-bezier(0.22, 1, 0.36, 1), background 180ms ease;
+			}
+
+			.tier__charm svg {
+				width: 18px;
+				height: 18px;
+				fill: none;
+				stroke: currentColor;
+				stroke-linecap: round;
+				stroke-linejoin: round;
+				stroke-width: 1.7;
+			}
+
+			.tier:hover .tier__charm,
+			.tier:focus-visible .tier__charm {
+				background: color-mix(in srgb, var(--accent) 17%, var(--panel-strong));
+			}
+
+			.tier:nth-child(1):hover .tier__charm,
+			.tier:nth-child(1):focus-visible .tier__charm {
+				animation: orbit-wobble 760ms cubic-bezier(0.22, 1, 0.36, 1);
+			}
+
+			.tier:nth-child(2):hover .tier__charm,
+			.tier:nth-child(2):focus-visible .tier__charm {
+				animation: heart-pop 620ms cubic-bezier(0.22, 1, 0.36, 1);
+			}
+
+			.tier:nth-child(3):hover .tier__charm,
+			.tier:nth-child(3):focus-visible .tier__charm {
+				animation: star-twinkle 720ms cubic-bezier(0.22, 1, 0.36, 1);
 			}
 
 			.popular-badge {
@@ -444,6 +531,25 @@
 
 			.support-panel.reveal {
 				animation-delay: 90ms;
+			}
+
+			@keyframes heart-pop {
+				0%, 100% { transform: scale(1) rotate(0); }
+				38% { transform: scale(1.28) rotate(-7deg); }
+				66% { transform: scale(0.94) rotate(3deg); }
+			}
+
+			@keyframes orbit-wobble {
+				0%, 100% { transform: rotate(0) scale(1); }
+				42% { transform: rotate(150deg) scale(1.12); }
+				70% { transform: rotate(320deg) scale(0.96); }
+			}
+
+			@keyframes star-twinkle {
+				0%, 100% { transform: rotate(0) scale(1); }
+				36% { transform: rotate(16deg) scale(1.24); }
+				62% { transform: rotate(-10deg) scale(0.94); }
+				82% { transform: rotate(6deg) scale(1.08); }
 			}
 
 			@keyframes rise-in {
@@ -605,7 +711,6 @@
 
 		<main class="page">
 			<section class="intro reveal" aria-labelledby="page-title">
-				<p class="eyebrow">Support Retime</p>
 				<h1 id="page-title">Support the time you save<span class="accent-stop">.</span></h1>
 				<p class="intro__copy">
 					Retime is free and independently built. If it makes working across time
@@ -648,6 +753,13 @@
 							rel="noreferrer"
 							aria-label="Contribute 3 dollars each month"
 						>
+							<span class="tier__charm" aria-hidden="true">
+								<svg viewBox="0 0 24 24">
+									<circle cx="12" cy="12" r="3.2" />
+									<path d="M4.5 12c0-3.9 3.4-7 7.5-7s7.5 3.1 7.5 7-3.4 7-7.5 7-7.5-3.1-7.5-7Z" />
+									<circle cx="18.4" cy="8.4" r="1" fill="currentColor" stroke="none" />
+								</svg>
+							</span>
 							<span class="tier__amount">$3 <small>/ month</small></span>
 							<span class="tier__label">A small boost</span>
 						</a>
@@ -659,6 +771,11 @@
 							aria-label="Contribute 8 dollars each month, popular option"
 						>
 							<span class="popular-badge">Popular</span>
+							<span class="tier__charm" aria-hidden="true">
+								<svg viewBox="0 0 24 24">
+									<path d="M20.8 4.8a5.2 5.2 0 0 0-7.4 0L12 6.2l-1.4-1.4a5.2 5.2 0 0 0-7.4 7.4L12 21l8.8-8.8a5.2 5.2 0 0 0 0-7.4Z" />
+								</svg>
+							</span>
 							<span class="tier__amount">$8 <small>/ month</small></span>
 							<span class="tier__label">Steady support</span>
 						</a>
@@ -669,13 +786,19 @@
 							rel="noreferrer"
 							aria-label="Contribute 15 dollars each month"
 						>
+							<span class="tier__charm" aria-hidden="true">
+								<svg viewBox="0 0 24 24">
+									<path d="m12 3 1.7 5.3L19 10l-5.3 1.7L12 17l-1.7-5.3L5 10l5.3-1.7L12 3Z" />
+									<path d="m19 16 .7 2.3L22 19l-2.3.7L19 22l-.7-2.3L16 19l2.3-.7L19 16Z" />
+								</svg>
+							</span>
 							<span class="tier__amount">$15 <small>/ month</small></span>
 							<span class="tier__label">Extra generous</span>
 						</a>
 					</div>
 					<p class="manage-note">
-						Need to change or cancel monthly support?
-						<a href="mailto:michaeljuskowicz@gmail.com?subject=Retime%20monthly%20support">Email me</a>.
+						Already contributing monthly?
+						<a href="https://billing.stripe.com/p/login/cNi7sE3mYdWX9WUe0t2ZO00" target="_blank" rel="noreferrer">Manage or cancel through Stripe</a>.
 					</p>
 				</section>
 			</article>
